@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" role="img" aria-label="우동현 오모테나시 패스포트 일러스트">
+  <defs>
+    <linearGradient id="cov" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2f6f6a"/>
+      <stop offset="1" stop-color="#245852"/>
+    </linearGradient>
+  </defs>
+  <rect width="480" height="300" fill="#eef1ee"/>
+  <g transform="translate(96 40)">
+    <rect x="0" y="0" width="288" height="220" rx="12" fill="url(#cov)"/>
+    <rect x="10" y="10" width="268" height="200" rx="8" fill="none" stroke="#e6c95f" stroke-width="1.5" opacity="0.7"/>
+    <text x="144" y="52" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="700" fill="#e6c95f">うどん県</text>
+    <text x="144" y="92" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="800" fill="#ffffff">おもてなし</text>
+    <text x="144" y="120" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="800" fill="#ffffff">パスポート</text>
+    <!-- 우동 그릇 일러스트 -->
+    <g transform="translate(144 165)">
+      <ellipse cx="0" cy="6" rx="42" ry="12" fill="#ffffff" opacity="0.95"/>
+      <path d="M-42 4 A42 12 0 0 0 42 4 L34 22 A34 10 0 0 1 -34 22 Z" fill="#f4f0e6"/>
+      <path d="M-24 -2 q6 -18 12 0 M-6 -4 q6 -20 12 0 M12 -2 q6 -18 12 0" fill="none" stroke="#e6c95f" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <text x="144" y="205" text-anchor="middle" font-family="sans-serif" font-size="9" letter-spacing="2" fill="#cfe0dd">KAGAWA · UDON PASSPORT</text>
+  </g>
+  <text x="240" y="285" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#8a9099">참고 일러스트 · 실제 여권 디자인과 다를 수 있어요</text>
+</svg>
