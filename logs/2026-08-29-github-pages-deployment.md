@@ -10,8 +10,11 @@
 - export directory: `dist/client`.
 - 이미지 검증: DAY 1 12장, DAY 2 35장, DAY 3 35장, DAY 4 24장, Takagi-san 6장, Yadon 14장으로 총 126장을 검사한다. Hero `day2-03.jpg`와 Epilogue `day4-24.jpg`도 포함한다.
 - 검증 명령: `npm run lint`, `npm run build`, `npm test`, `npm run build:pages`, `npm run verify:pages`.
-- Pages 설정: 공개 저장소 생성 및 첫 push 후 GitHub Actions source로 활성화한다.
-- 실제 배포 URL: `https://lice201.github.io/Takamatsu-Travel-Public/`.
-- 남은 수동 작업: 없음. 배포 완료 후 workflow와 실제 HTTP asset 응답을 확인한다.
+- Pages 설정: 공개 저장소의 Source를 GitHub Actions로 활성화했다.
+- workflow 상태: Actions run `33186334551` 성공.
+- 실제 배포 URL: `https://lice201.github.io/Takamatsu-Travel-Public/`에서 HTTP 200과 여행기 title을 확인했다.
+- 실제 asset 검증: 배포 HTML이 참조한 로컬 URL 133개 중 사진 126개와 CSS/JS asset 6개를 포함해 실패 0건.
+- 남은 수동 작업: 없음.
 - 기준 소스 커밋: 비공개 저장소 `2624807af22d9b58bbc140e910596178de953428`.
 - 공개 저장소 초기 commit SHA: `f03a4aafbe4e44e7b423e65b45916f0a276b0203`.
+- 첫 Pages 배포 commit SHA: `18a5aef09d8d4b6aeceb29b99d3432109438baea`.
