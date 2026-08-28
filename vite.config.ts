@@ -47,7 +47,7 @@ export default defineConfig(async () => {
   const { cloudflare } = await import("@cloudflare/vite-plugin");
 
   return {
-    base: isGitHubPagesBuild ? "/Takamatsu-Travel/" : undefined,
+    base: isGitHubPagesBuild ? "/Takamatsu-Travel-Public/" : undefined,
     server: isCodexSeatbeltSandbox
       ? { watch: { useFsEvents: false, usePolling: true } }
       : undefined,

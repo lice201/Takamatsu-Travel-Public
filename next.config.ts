@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const githubPagesBasePath = "/Takamatsu-Travel";
+const githubPagesBasePath = "/Takamatsu-Travel-Public";
 const isGitHubPagesBuild =
   process.env.GITHUB_PAGES === "true" || process.env.npm_lifecycle_event === "build:pages";
 

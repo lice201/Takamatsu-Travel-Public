@@ -5,7 +5,7 @@ import { withBasePath } from "./site-paths";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://lice201.github.io/Takamatsu-Travel/"),
+  metadataBase: new URL("https://lice201.github.io/Takamatsu-Travel-Public/"),
   title: "Takamatsu Travel Log | 3 Nights / 4 Days",
   description: "실제 이동과 사진 126장으로 정리한 2026년 8월 다카마쓰·쇼도시마 3박 4일 여행기",
   openGraph: {

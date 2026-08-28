@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const outputRoot = path.join(repositoryRoot, "dist", "client");
-const basePath = "/Takamatsu-Travel";
+const basePath = "/Takamatsu-Travel-Public";
 
 async function readOutput(relativePath) {
   return readFile(path.join(outputRoot, ...relativePath.split("/")), "utf8");
@@ -36,14 +36,14 @@ assert.match(travelLogHtml, /Takamatsu Travel Log/);
 assert.match(planHtml, /TRIP NOTE/);
 
 for (const html of [rootHtml, travelLogHtml, planHtml]) {
-  assert.doesNotMatch(html, /(?:src|href)="\/(?!Takamatsu-Travel(?:\/|"))/);
-  const localUrls = [...html.matchAll(/(?:src|href)="(\/Takamatsu-Travel(?:\/[^"]*)?)"/g)]
+  assert.doesNotMatch(html, /(?:src|href)="\/(?!Takamatsu-Travel-Public(?:\/|"))/);
+  const localUrls = [...html.matchAll(/(?:src|href)="(\/Takamatsu-Travel-Public(?:\/[^"]*)?)"/g)]
     .map((match) => match[1])
     .filter((url) => !url.includes("#"));
   await Promise.all([...new Set(localUrls)].map(assertOutputPath));
 }
 
-const photoUrls = [...rootHtml.matchAll(/src="(\/Takamatsu-Travel\/travel-log\/[a-z0-9-]+\/[a-z0-9-]+\.jpg)"/g)]
+const photoUrls = [...rootHtml.matchAll(/src="(\/Takamatsu-Travel-Public\/travel-log\/[a-z0-9-]+\/[a-z0-9-]+\.jpg)"/g)]
   .map((match) => match[1]);
 const uniquePhotoUrls = [...new Set(photoUrls)];
 
