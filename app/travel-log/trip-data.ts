@@ -31,13 +31,19 @@ export type ThemeSection = {
   photos: TripPhoto[];
 };
 
+// Restaurant editing:
+// restaurantName = store name · branchName = branch · location = city / area
+// menu = ordered items · review = personal notes
 export type MealStop = {
   label: "BREAKFAST" | "LUNCH" | "DINNER" | "EAT";
   restaurantName: string;
-  time?: string;
+  branchName?: string;
+  subtitle?: string;
   location?: string;
-  menu: string[];
-  review: string;
+  time?: string;
+  menu?: string[];
+  review?: string;
+  note?: string;
   photos: TripPhoto[];
 };
 

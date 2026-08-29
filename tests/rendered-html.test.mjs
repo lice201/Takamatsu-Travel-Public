@@ -45,7 +45,7 @@ test("server-renders the actual Timeline-based travel log", async () => {
   assert.match(html, /Honetsukidori/);
   assert.match(html, /aria-label="DINNER · Honetsukidori"/);
   assert.match(html, /aria-label="LUNCH · Sushiro"/);
-  assert.match(html, /TODO · ADD RESTAURANT REVIEW/);
+  assert.doesNotMatch(html, /TODO · ADD ORDERED MENU|TODO · ADD RESTAURANT REVIEW/);
   assert.match(html, /THEME \/ TAKAGI-SAN/);
   assert.match(html, /SHODOSHIMA SIDE STORY/);
   assert.match(html, /THEME \/ YADON/);
@@ -80,18 +80,22 @@ test("all 126 final travel photos render from ASCII-safe files", async () => {
   assert.doesNotMatch(html, /PLACEHOLDER|TEMP COVER|TEMP END FRAME/);
 });
 
-test("photo essays use repeatable blocks and meal data stays editable", async () => {
-  const [pageSource, dataSource, css] = await Promise.all([
+test("photo essays use repeatable blocks and restaurant data stays editable", async () => {
+  const [pageSource, photoSource, restaurantSource, dataSource, css] = await Promise.all([
     readFile(new URL("../app/travel-log/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/travel-log/PhotoSequence.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/travel-log/RestaurantSection.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/travel-log/trip-data.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/travel-log/travel-log.module.css", import.meta.url), "utf8"),
   ]);
-  assert.match(pageSource, /MAX_PHOTOS_PER_BLOCK = 3/);
-  assert.match(pageSource, /buildPhotoBlocks/);
-  assert.doesNotMatch(pageSource, /photos\.length === 3/);
-  assert.match(pageSource, /loading="lazy"/);
-  assert.doesNotMatch(pageSource, /eagerFirst/);
+  assert.match(pageSource, /RestaurantSection meal=\{stop\.meal\}/);
+  assert.match(photoSource, /MAX_PHOTOS_PER_BLOCK = 3/);
+  assert.match(photoSource, /buildPhotoBlocks/);
+  assert.doesNotMatch(photoSource, /photos\.length === 3/);
+  assert.match(photoSource, /loading="lazy"/);
+  assert.doesNotMatch(photoSource, /eagerFirst/);
   assert.match(dataSource, /export type MealStop/);
+  for (const field of ["branchName", "subtitle", "location", "time", "menu", "review", "note"]) assert.match(dataSource, new RegExp(`${field}\\?:`));
   assert.match(dataSource, /export type ThemeSection/);
   assert.match(dataSource, /tripThemes/);
   assert.doesNotMatch(dataSource, /actualPhotos|photoIds|actualLayouts/);
@@ -118,11 +122,18 @@ test("photo essays use repeatable blocks and meal data stays editable", async ()
   }
   assert.match(dataSource, /objectPosition\?: string/);
   assert.match(dataSource, /objectFit\?: "cover" \| "contain"/);
-  assert.match(pageSource, /sizeClassMap: Record<TripPhoto\["size"\], string>/);
-  assert.match(pageSource, /data-photo-size=\{photo\.size\}/);
-  assert.match(pageSource, /objectPosition: photo\.objectPosition/);
-  assert.match(pageSource, /objectFit: photo\.objectFit/);
-  assert.match(dataSource, /review: ""/);
+  assert.match(photoSource, /sizeClassMap: Record<TripPhoto\["size"\], string>/);
+  assert.match(photoSource, /data-photo-size=\{photo\.size\}/);
+  assert.match(photoSource, /objectPosition: photo\.objectPosition/);
+  assert.match(photoSource, /objectFit: photo\.objectFit/);
+  assert.match(restaurantSource, /if \(!restaurantName\) return meal\.photos/);
+  assert.match(restaurantSource, /meal\.menu\?\.filter/);
+  assert.match(restaurantSource, /detailCount > 0/);
+  assert.match(restaurantSource, /location \|\| time/);
+  assert.doesNotMatch(restaurantSource, /TODO · ADD/);
+  assert.match(dataSource, /restaurantName: "Honetsukidori"/);
+  assert.match(dataSource, /restaurantName: "Sushiro"/);
+  assert.match(css, /mealNotes\[data-columns="1"\]/);
   assert.match(css, /photoBlock\[data-count="2"\]/);
   assert.match(css, /photoBlock\[data-count="3"\]/);
   assert.match(css, /\.sizeXs[^}]*--photo-width: 38%/);

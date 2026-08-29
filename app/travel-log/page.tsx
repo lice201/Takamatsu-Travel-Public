@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { RevealObserver } from "./RevealObserver";
 import { RouteMap } from "./RouteMap";
+import { PhotoSequence } from "./PhotoSequence";
+import { RestaurantSection } from "./RestaurantSection";
 import { ModeIcon } from "./ModeIcon";
 import { withBasePath } from "../site-paths";
-import { modeLabels, tripDays, tripStats, tripThemes, type MealStop, type ThemeSection, type TripLeg, type TripPhoto } from "./trip-data";
+import { modeLabels, tripDays, tripStats, tripThemes, type ThemeSection, type TripLeg } from "./trip-data";
 import styles from "./travel-log.module.css";
 import timelineStyles from "./timeline.module.css";
 
@@ -19,79 +21,6 @@ export const metadata: Metadata = {
   },
 };
 
-const sizeClassMap: Record<TripPhoto["size"], string> = {
-  xs: styles.sizeXs,
-  small: styles.sizeSmall,
-  medium: styles.sizeMedium,
-  large: styles.sizeLarge,
-  full: styles.sizeFull,
-};
-
-function Photo({ photo }: { photo: TripPhoto }) {
-  return (
-    <figure
-      className={[styles.photo, styles[photo.layout], sizeClassMap[photo.size]].join(" ")}
-      data-photo-size={photo.size}
-      data-placeholder-note={photo.placeholder ? photo.replacementNote : undefined}
-    >
-      {photo.src ? (
-        <img
-          src={photo.src}
-          alt={photo.alt}
-          width="1400"
-          height="980"
-          loading="lazy"
-          decoding="async"
-          style={{ objectPosition: photo.objectPosition, objectFit: photo.objectFit }}
-        />
-      ) : (
-        <div className={styles.textPhotoPlaceholder} role="img" aria-label={photo.alt}>
-          <span>{photo.placeholderLabel ?? "PHOTO"}</span>
-        </div>
-      )}
-      {(photo.caption || photo.placeholder) && <figcaption><span>{photo.caption}</span>{photo.placeholder && <small>PLACEHOLDER</small>}</figcaption>}
-    </figure>
-  );
-}
-
-const MAX_PHOTOS_PER_BLOCK = 3;
-
-function buildPhotoBlocks(photos: TripPhoto[]) {
-  const grouped: TripPhoto[][] = [];
-  let activeKey: string | undefined;
-
-  photos.forEach((photo, index) => {
-    const key = photo.group === undefined ? `auto-${Math.floor(index / MAX_PHOTOS_PER_BLOCK)}` : `group-${photo.group}`;
-    if (key !== activeKey) {
-      grouped.push([]);
-      activeKey = key;
-    }
-    grouped.at(-1)?.push(photo);
-  });
-
-  return grouped.flatMap((group) => {
-    const blocks: TripPhoto[][] = [];
-    for (let index = 0; index < group.length; index += MAX_PHOTOS_PER_BLOCK) {
-      blocks.push(group.slice(index, index + MAX_PHOTOS_PER_BLOCK));
-    }
-    return blocks;
-  });
-}
-
-function PhotoSequence({ photos }: { photos: TripPhoto[] }) {
-  return (
-    <div className={styles.photoSequence} data-reveal>
-      {buildPhotoBlocks(photos).map((block, blockIndex) => (
-        <div className={styles.photoBlock} data-count={block.length} key={`photo-block-${blockIndex}`}>
-          {block.map((photo, photoIndex) => (
-            <Photo key={`${photo.src ?? photo.placeholderLabel}-${photoIndex}`} photo={photo} />
-          ))}
-        </div>
-      ))}
-    </div>
-  );
-}
-
 function ThemeGallery({ theme }: { theme: ThemeSection }) {
   return (
     <section className={styles.themeSection} aria-label={theme.label} data-reveal>
@@ -100,31 +29,6 @@ function ThemeGallery({ theme }: { theme: ThemeSection }) {
         <div><h3>{theme.title}</h3><span>{theme.note}</span></div>
       </header>
       <PhotoSequence photos={theme.photos} />
-    </section>
-  );
-}
-
-function MealSection({ meal }: { meal: MealStop }) {
-  return (
-    <section className={styles.mealSection} aria-label={`${meal.label} · ${meal.restaurantName}`} data-reveal>
-      <header className={styles.mealHeader}>
-        <p>FOOD / {meal.label}</p>
-        <div>
-          <span>{meal.time ?? "—"}{meal.location ? ` · ${meal.location}` : ""}</span>
-          <h4>{meal.restaurantName}</h4>
-        </div>
-      </header>
-      <div className={styles.mealNotes}>
-        <div>
-          <b>MENU</b>
-          {meal.menu.length > 0 ? <ul>{meal.menu.map((item) => <li key={item}>{item}</li>)}</ul> : <p>TODO · ADD ORDERED MENU</p>}
-        </div>
-        <div>
-          <b>REVIEW</b>
-          {meal.review ? <blockquote>{meal.review}</blockquote> : <p>TODO · ADD RESTAURANT REVIEW</p>}
-        </div>
-      </div>
-      {meal.photos.length > 0 && <PhotoSequence photos={meal.photos} />}
     </section>
   );
 }
@@ -228,7 +132,7 @@ export default function TravelLogPage() {
                   {stop.photos.length > 0 && (
                     <PhotoSequence photos={stop.photos} />
                   )}
-                  {stop.meal && <MealSection meal={stop.meal} />}
+                  {stop.meal && <RestaurantSection meal={stop.meal} />}
                   {day.legs[stopIndex] && <Transfer leg={day.legs[stopIndex]} />}
                 </section>
               ))}
