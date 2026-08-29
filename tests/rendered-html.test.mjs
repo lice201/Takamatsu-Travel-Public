@@ -94,11 +94,31 @@ test("photo essays use repeatable blocks and meal data stays editable", async ()
   assert.match(dataSource, /export type MealStop/);
   assert.match(dataSource, /export type ThemeSection/);
   assert.match(dataSource, /tripThemes/);
-  assert.match(dataSource, /actualPhotos\("day3", photoIds\(30, 32\)/);
-  assert.match(dataSource, /actualPhotos\("day4", photoIds\(15, 18\)/);
+  assert.doesNotMatch(dataSource, /actualPhotos|photoIds|actualLayouts/);
+  const photoEntries = [...dataSource.matchAll(/photo\("(day1|day2|day2-takagi|day3|day4|yadon)", (\d+), \{([\s\S]*?)\n\s*\}\),/g)];
+  assert.equal(photoEntries.length, 126);
+  assert.equal(new Set(photoEntries.map((entry) => `${entry[1]}-${entry[2]}`)).size, 126);
+  for (const [, , , options] of photoEntries) {
+    assert.match(options, /alt: "/);
+    assert.match(options, /caption: "/);
+    assert.match(options, /layout: "(?:wide|portrait|split|collage|panorama)"/);
+    assert.match(options, /group: \d+/);
+    assert.match(options, /objectPosition: "/);
+  }
+  assert.match(dataSource, /photo\("day3", 30, \{[\s\S]*?caption: "호네츠키도리"/);
+  assert.match(dataSource, /photo\("day4", 15, \{[\s\S]*?caption: "스시로 점심"/);
+  assert.match(dataSource, /photo\("day2-takagi", 1, \{/);
+  assert.match(dataSource, /photo\("yadon", 14, \{/);
+  assert.match(dataSource, /photo\("day1", 1, \{[\s\S]*?layout: "portrait"[\s\S]*?objectFit: "contain"/);
+  assert.match(dataSource, /objectPosition\?: string/);
+  assert.match(dataSource, /objectFit\?: "cover" \| "contain"/);
+  assert.match(pageSource, /objectPosition: photo\.objectPosition/);
+  assert.match(pageSource, /objectFit: photo\.objectFit/);
   assert.match(dataSource, /review: ""/);
   assert.match(css, /photoBlock\[data-count="2"\]/);
   assert.match(css, /photoBlock\[data-count="3"\]/);
+  assert.match(css, /photoBlock\[data-count="1"\] > \.portrait/);
+  assert.match(css, /photoBlock > \.panorama/);
 });
 
 test("route map provides non-color transport distinctions and actual-route labels", async () => {

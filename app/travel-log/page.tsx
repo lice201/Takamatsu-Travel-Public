@@ -22,7 +22,15 @@ function Photo({ photo }: { photo: TripPhoto }) {
   return (
     <figure className={`${styles.photo} ${styles[photo.layout]}`} data-placeholder-note={photo.placeholder ? photo.replacementNote : undefined}>
       {photo.src ? (
-        <img src={photo.src} alt={photo.alt} width="1400" height="980" loading="lazy" decoding="async" />
+        <img
+          src={photo.src}
+          alt={photo.alt}
+          width="1400"
+          height="980"
+          loading="lazy"
+          decoding="async"
+          style={{ objectPosition: photo.objectPosition, objectFit: photo.objectFit }}
+        />
       ) : (
         <div className={styles.textPhotoPlaceholder} role="img" aria-label={photo.alt}>
           <span>{photo.placeholderLabel ?? "PHOTO"}</span>
