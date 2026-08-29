@@ -7,34 +7,34 @@
 .segmentFlight { stroke-width: .9; stroke-dasharray: 5 3; opacity: .8; }
 .segmentShopping { stroke-width: 1.15; stroke-dasharray: .8 1.2; opacity: .92; }
 
-.mapLegend { display: flex; flex-wrap: wrap; gap: .55rem 1rem; margin-top: .7rem; }
-.mapLegend b { position: relative; padding-left: 1.5rem; color: #3f5557; font-size: .58rem; letter-spacing: .1em; }
-.mapLegend b::before { content: ""; position: absolute; left: 0; top: 50%; width: 1.1rem; border-top: 1px solid var(--sea); }
-.legendTRAIN::before { border-top-width: 2px !important; }
-.legendFERRY::before, .legendFLIGHT::before { border-top-style: dashed !important; }
-.legendWALK::before, .legendBIKE::before { border-top-style: dotted !important; }
-.legendSHOPPING::before { border-top: 2px dotted var(--sea) !important; }
+.mapLegend { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: .85rem; }
+.mapLegend b, .modeBadge { display: inline-flex; align-items: center; gap: .5rem; width: fit-content; color: #31545a; font: 700 .72rem/1 Arial,"Noto Sans KR",sans-serif; letter-spacing: .11em; }
+.mapLegend b { padding: .55rem .7rem; border: 1px solid rgba(49,84,90,.24); background: rgba(255,255,255,.34); }
+.mapLegend svg, .modeBadge svg { width: 1.15rem; height: 1.15rem; flex: none; }
 
-.contextLegs { display: grid; gap: .5rem; margin-top: 1.5rem; }
-.contextLegs > div { display: grid; grid-template-columns: auto 1fr auto; gap: .75rem; align-items: center; padding: .75rem 0; border-top: 1px solid var(--line); font-family: Arial, "Noto Sans KR", sans-serif; }
-.contextLegs b { color: var(--sea); font-size: .62rem; letter-spacing: .15em; }
-.contextLegs span { color: var(--ink); font-size: .75rem; }
-.contextLegs span:last-child { color: var(--muted); font-size: .62rem; letter-spacing: .08em; }
+.contextLegs { display: grid; gap: .55rem; margin-top: 1.75rem; }
+.contextLegs > div { display: grid; grid-template-columns: minmax(7rem,auto) 1fr auto; gap: 1rem; align-items: center; padding: .9rem 0; border-top: 1px solid var(--line); font-family: Arial,"Noto Sans KR",sans-serif; }
+.contextLegs b { font: inherit; }
+.contextLegs > div > span:nth-child(2) { color: var(--ink); font-size: .9rem; }
+.contextTime { color: #565e59; font-size: .76rem; font-weight: 600; letter-spacing: .06em; }
 
-.timelineStopList { gap: clamp(4.5rem, 9vw, 8rem); }
-.transfer { width: min(940px, calc(100% - 2.5rem)); min-height: 7rem; margin: clamp(2.5rem, 5vw, 4.5rem) auto 0; display: grid; grid-template-columns: 4rem 1fr; gap: 1.5rem; font-family: Arial, "Noto Sans KR", sans-serif; }
+.timelineStopList { gap: clamp(4.5rem,8vw,8rem); }
+.transfer { width: min(1120px,92vw); min-height: 7.5rem; margin: clamp(2.75rem,5vw,4.75rem) auto 0; display: grid; grid-template-columns: 4.5rem 1fr; gap: 1.5rem; font-family: Arial,"Noto Sans KR",sans-serif; }
 .transferRail { position: relative; display: flex; justify-content: center; }
-.transferRail::before { content: ""; position: absolute; top: 0; bottom: 0; width: 1px; background: var(--line); }
-.transferRail i { position: relative; width: .55rem; height: .55rem; margin-top: 1.25rem; border: 2px solid var(--paper); border-radius: 50%; background: var(--sea); box-shadow: 0 0 0 1px var(--sea); }
-.transferBody { padding: .85rem 0 1.4rem; }
-.transferBody > span { display: block; color: var(--muted); font-size: .62rem; letter-spacing: .13em; }
-.transferBody strong { display: inline-block; margin: .7rem 0 .45rem; color: var(--sea); font-size: .68rem; letter-spacing: .18em; }
-.transferBody p { margin: 0; color: var(--ink); font-size: .84rem; }
+.transferRail::before { content: ""; position: absolute; top: 0; bottom: 0; width: 2px; background: var(--line); }
+.transferRail i { position: relative; width: .7rem; height: .7rem; margin-top: 1.3rem; border: 2px solid var(--paper); border-radius: 50%; background: var(--sea); box-shadow: 0 0 0 2px var(--sea); }
+.transferBody { padding: .75rem 0 1.6rem; }
+.transferHeader { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: .75rem; }
+.transferTime { color: #565e59; font-size: .8rem; font-weight: 600; letter-spacing: .08em; }
+.transferBody strong { font: inherit; }
+.transferBody p { margin: 0; color: var(--ink); font-size: 1rem; font-weight: 500; }
 
 @media (max-width: 760px) {
-  .contextLegs > div { grid-template-columns: auto 1fr; }
-  .contextLegs span:last-child { grid-column: 2; }
-  .transfer { grid-template-columns: 2.2rem 1fr; gap: .6rem; }
+  .contextLegs > div { grid-template-columns: 1fr; gap: .65rem; }
+  .contextTime { grid-column: 1; }
+  .transfer { grid-template-columns: 2.4rem 1fr; gap: .75rem; }
+  .transferHeader { align-items: flex-start; flex-direction: column; gap: .65rem; }
+  .transferBody p { font-size: .95rem; line-height: 1.5; }
 }
 
 @media (prefers-reduced-motion: reduce) { .routeSegment { transition: none; } }

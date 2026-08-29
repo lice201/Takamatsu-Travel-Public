@@ -125,27 +125,38 @@ test("photo essays use repeatable blocks and meal data stays editable", async ()
   assert.match(dataSource, /review: ""/);
   assert.match(css, /photoBlock\[data-count="2"\]/);
   assert.match(css, /photoBlock\[data-count="3"\]/);
-  assert.match(css, /\.sizeXs[^}]*--photo-width: 34%/);
-  assert.match(css, /\.sizeSmall[^}]*--photo-width: 50%/);
-  assert.match(css, /\.sizeMedium[^}]*--photo-width: 68%/);
-  assert.match(css, /\.sizeLarge[^}]*--photo-width: 84%/);
+  assert.match(css, /\.sizeXs[^}]*--photo-width: 38%/);
+  assert.match(css, /\.sizeSmall[^}]*--photo-width: 54%/);
+  assert.match(css, /\.sizeMedium[^}]*--photo-width: 72%/);
+  assert.match(css, /\.sizeLarge[^}]*--photo-width: 88%/);
   assert.match(css, /\.sizeFull[^}]*--photo-width: 100%/);
   assert.match(css, /photoBlock\[data-count="1"\] > \.photo[^}]*var\(--photo-width\)/s);
   assert.match(css, /photoBlock\[data-count="2"\] > \.photo[^}]*var\(--photo-weight\)/s);
   assert.match(css, /photoBlock\[data-count="3"\][\s\S]*var\(--photo-width\)/);
-  assert.match(css, /--photo-mobile-width: 82%/);
+  assert.match(css, /--photo-mobile-width: 86%/);
 });
 
-test("route map provides non-color transport distinctions and actual-route labels", async () => {
-  const [mapSource, css] = await Promise.all([
+test("route map provides numbered places, mode icons, and non-color transport distinctions", async () => {
+  const [mapSource, iconSource, timelineCss, pageCss] = await Promise.all([
     readFile(new URL("../app/travel-log/RouteMap.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/travel-log/ModeIcon.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/travel-log/timeline.module.css", import.meta.url), "utf8"),
+    readFile(new URL("../app/travel-log/travel-log.module.css", import.meta.url), "utf8"),
   ]);
   assert.match(mapSource, /이날의 실제 이동 경로/);
   assert.match(mapSource, /지도 이동수단 범례/);
-  assert.match(css, /segmentFerry[^}]*stroke-dasharray/s);
-  assert.match(css, /segmentTrain[^}]*stroke-width/s);
-  assert.match(css, /legendFERRY/);
-  assert.match(css, /segmentShopping[^}]*stroke-dasharray/s);
-  assert.match(css, /legendSHOPPING/);
+  assert.match(mapSource, /지도 장소 번호/);
+  assert.doesNotMatch(mapSource, /markerLabel/);
+  for (const mode of ["bus", "train", "ferry", "walk", "bicycle", "shopping", "flight"]) {
+    assert.match(iconSource, new RegExp(`mode === "${mode}"`));
+  }
+  assert.match(timelineCss, /segmentFerry[^}]*stroke-dasharray/s);
+  assert.match(timelineCss, /segmentTrain[^}]*stroke-width/s);
+  assert.match(timelineCss, /modeBadge[^}]*inline-flex/s);
+  assert.match(timelineCss, /transferBody p[^}]*font-size: 1rem/s);
+  assert.match(pageCss, /\.overview[^}]*min\(1500px, 92vw\)/s);
+  assert.match(pageCss, /\.photoSequence[^}]*min\(1500px, 92vw\)/s);
+  assert.match(pageCss, /photo figcaption[^}]*font: 500 1rem\/1\.55/s);
+  assert.match(pageCss, /mapPlaceLegend[^}]*repeat\(3/s);
+  assert.match(pageCss, /@media \(max-width: 760px\)[\s\S]*mapPlaceLegend[^}]*repeat\(2/s);
 });

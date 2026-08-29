@@ -8,6 +8,7 @@ import {
 } from "./trip-data";
 import styles from "./travel-log.module.css";
 import timelineStyles from "./timeline.module.css";
+import { ModeIcon } from "./ModeIcon";
 
 const segmentClass: Record<TransportMode, string> = {
   walk: "segmentWalk",
@@ -54,15 +55,19 @@ export function RouteMap({ stops, legs, compact = false }: { stops?: MapStop[]; 
             <circle className={styles.markerHalo} r={stop.mapEmphasis === "primary" ? "5.4" : stop.mapEmphasis === "terminal" ? "3.5" : "4.2"} />
             <circle className={styles.marker} r={stop.mapEmphasis === "primary" ? "2.7" : stop.mapEmphasis === "terminal" ? "1.7" : "2.1"} />
             <text className={styles.markerIndex} x="0" y="0.8" textAnchor="middle">{index + 1}</text>
-            {!compact && <text className={styles.markerLabel} x={stop.mapX > 68 ? -4 : 4} y={stop.mapY < 25 ? 7 : -4} textAnchor={stop.mapX > 68 ? "end" : "start"}>{stop.name}</text>}
           </g>
         ))}
       </svg>
       <figcaption>
         <span>{compact ? "ACTUAL DAY ROUTE" : "ACTUAL ROUTE · 24–27 AUG 2026"}</span>
         <span className={timelineStyles.mapLegend} aria-label="지도 이동수단 범례">
-          {modes.map((mode) => <b key={mode} className={timelineStyles[`legend${modeLabels[mode]}`]}>{modeLabels[mode]}</b>)}
+          {modes.map((mode) => <b key={mode} className={timelineStyles[`legend${modeLabels[mode]}`]}><ModeIcon mode={mode} />{modeLabels[mode]}</b>)}
         </span>
+        {!compact && (
+          <ol className={styles.mapPlaceLegend} aria-label="지도 장소 번호">
+            {markers.map((stop, index) => <li key={`${stop.name}-${stop.mapX}-${stop.mapY}`}><b>{index + 1}</b><span>{stop.name}</span></li>)}
+          </ol>
+        )}
       </figcaption>
     </figure>
   );

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { RevealObserver } from "./RevealObserver";
 import { RouteMap } from "./RouteMap";
+import { ModeIcon } from "./ModeIcon";
 import { withBasePath } from "../site-paths";
 import { modeLabels, tripDays, tripStats, tripThemes, type MealStop, type ThemeSection, type TripLeg, type TripPhoto } from "./trip-data";
 import styles from "./travel-log.module.css";
@@ -128,9 +129,9 @@ function MealSection({ meal }: { meal: MealStop }) {
   );
 }
 
-function LegTime({ leg }: { leg: TripLeg }) {
-  if (!leg.startTime && !leg.endTime) return <span>TIME —</span>;
-  return <span>{leg.startTime ?? "—"} — {leg.endTime ?? "—"}</span>;
+function LegTime({ leg, className }: { leg: TripLeg; className?: string }) {
+  if (!leg.startTime && !leg.endTime) return <span className={className}>TIME —</span>;
+  return <span className={className}>{leg.startTime ?? "—"} — {leg.endTime ?? "—"}</span>;
 }
 
 function Transfer({ leg }: { leg: TripLeg }) {
@@ -138,8 +139,10 @@ function Transfer({ leg }: { leg: TripLeg }) {
     <div className={timelineStyles.transfer} aria-label={`${leg.from}에서 ${leg.to}까지 ${modeLabels[leg.mode]} 이동`}>
       <div className={timelineStyles.transferRail} aria-hidden="true"><i /></div>
       <div className={timelineStyles.transferBody}>
-        <LegTime leg={leg} />
-        <strong>{modeLabels[leg.mode]}</strong>
+        <div className={timelineStyles.transferHeader}>
+          <span className={timelineStyles.modeBadge}><ModeIcon mode={leg.mode} /><strong>{modeLabels[leg.mode]}</strong></span>
+          <LegTime leg={leg} className={timelineStyles.transferTime} />
+        </div>
         <p>{leg.from} → {leg.to}</p>
       </div>
     </div>
@@ -175,7 +178,7 @@ export default function TravelLogPage() {
           <h2 id="overview-title">바다를 오간<br />나흘의 경로</h2>
           <span>실제 이동 기록을 바탕으로 다카마쓰공항, 쇼도시마, 리쓰린, 고토히라, 마루가메, 붓쇼잔과 마지막 날의 유메타운을 이어 정리했습니다.</span>
         </div>
-        <div data-reveal><RouteMap /></div>
+        <div className={styles.overviewMapWrap} data-reveal><RouteMap /></div>
         <dl className={styles.stats}>{tripStats.map((stat) => <div key={stat.label}><dt>{stat.label}</dt><dd>{stat.value}</dd></div>)}</dl>
       </section>
 
@@ -198,7 +201,11 @@ export default function TravelLogPage() {
                 {day.contextLegs && (
                   <div className={timelineStyles.contextLegs} aria-label="이날의 항공 이동">
                     {day.contextLegs.map((leg) => (
-                      <div key={`${leg.from}-${leg.to}`}><b>{modeLabels[leg.mode]}</b><span>{leg.from} → {leg.to}</span><LegTime leg={leg} /></div>
+                      <div key={`${leg.from}-${leg.to}`}>
+                        <span className={timelineStyles.modeBadge}><ModeIcon mode={leg.mode} /><b>{modeLabels[leg.mode]}</b></span>
+                        <span>{leg.from} → {leg.to}</span>
+                        <LegTime leg={leg} className={timelineStyles.contextTime} />
+                      </div>
                     ))}
                   </div>
                 )}
