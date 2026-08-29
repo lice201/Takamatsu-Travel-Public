@@ -18,9 +18,21 @@ export const metadata: Metadata = {
   },
 };
 
+const sizeClassMap: Record<TripPhoto["size"], string> = {
+  xs: styles.sizeXs,
+  small: styles.sizeSmall,
+  medium: styles.sizeMedium,
+  large: styles.sizeLarge,
+  full: styles.sizeFull,
+};
+
 function Photo({ photo }: { photo: TripPhoto }) {
   return (
-    <figure className={`${styles.photo} ${styles[photo.layout]}`} data-placeholder-note={photo.placeholder ? photo.replacementNote : undefined}>
+    <figure
+      className={[styles.photo, styles[photo.layout], sizeClassMap[photo.size]].join(" ")}
+      data-photo-size={photo.size}
+      data-placeholder-note={photo.placeholder ? photo.replacementNote : undefined}
+    >
       {photo.src ? (
         <img
           src={photo.src}

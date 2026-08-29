@@ -102,6 +102,7 @@ test("photo essays use repeatable blocks and meal data stays editable", async ()
     assert.match(options, /alt: "/);
     assert.match(options, /caption: "/);
     assert.match(options, /layout: "(?:wide|portrait|split|collage|panorama)"/);
+    assert.match(options, /size: "(?:xs|small|medium|large|full)"/);
     assert.match(options, /group: \d+/);
     assert.match(options, /objectPosition: "/);
   }
@@ -110,15 +111,29 @@ test("photo essays use repeatable blocks and meal data stays editable", async ()
   assert.match(dataSource, /photo\("day2-takagi", 1, \{/);
   assert.match(dataSource, /photo\("yadon", 14, \{/);
   assert.match(dataSource, /photo\("day1", 1, \{[\s\S]*?layout: "portrait"[\s\S]*?objectFit: "contain"/);
+  assert.match(dataSource, /export type PhotoSize = "xs" \| "small" \| "medium" \| "large" \| "full"/);
+  assert.match(dataSource, /size: PhotoSize/);
+  for (const size of ["xs", "small", "medium", "large", "full"]) {
+    assert.match(dataSource, new RegExp(`size: "${size}"`));
+  }
   assert.match(dataSource, /objectPosition\?: string/);
   assert.match(dataSource, /objectFit\?: "cover" \| "contain"/);
+  assert.match(pageSource, /sizeClassMap: Record<TripPhoto\["size"\], string>/);
+  assert.match(pageSource, /data-photo-size=\{photo\.size\}/);
   assert.match(pageSource, /objectPosition: photo\.objectPosition/);
   assert.match(pageSource, /objectFit: photo\.objectFit/);
   assert.match(dataSource, /review: ""/);
   assert.match(css, /photoBlock\[data-count="2"\]/);
   assert.match(css, /photoBlock\[data-count="3"\]/);
-  assert.match(css, /photoBlock\[data-count="1"\] > \.portrait/);
-  assert.match(css, /photoBlock > \.panorama/);
+  assert.match(css, /\.sizeXs[^}]*--photo-width: 34%/);
+  assert.match(css, /\.sizeSmall[^}]*--photo-width: 50%/);
+  assert.match(css, /\.sizeMedium[^}]*--photo-width: 68%/);
+  assert.match(css, /\.sizeLarge[^}]*--photo-width: 84%/);
+  assert.match(css, /\.sizeFull[^}]*--photo-width: 100%/);
+  assert.match(css, /photoBlock\[data-count="1"\] > \.photo[^}]*var\(--photo-width\)/s);
+  assert.match(css, /photoBlock\[data-count="2"\] > \.photo[^}]*var\(--photo-weight\)/s);
+  assert.match(css, /photoBlock\[data-count="3"\][\s\S]*var\(--photo-width\)/);
+  assert.match(css, /--photo-mobile-width: 82%/);
 });
 
 test("route map provides non-color transport distinctions and actual-route labels", async () => {
