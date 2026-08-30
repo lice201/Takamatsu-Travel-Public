@@ -47,7 +47,7 @@ const photoUrls = [...rootHtml.matchAll(/src="(\/Takamatsu-Travel-Public\/travel
   .map((match) => match[1]);
 const uniquePhotoUrls = [...new Set(photoUrls)];
 
-assert.equal(uniquePhotoUrls.length, 126);
+assert.equal(uniquePhotoUrls.length, 121);
 assert.ok(uniquePhotoUrls.includes(`${basePath}/travel-log/day2/day2-03.jpg`));
 assert.ok(uniquePhotoUrls.includes(`${basePath}/travel-log/day4/day4-24.jpg`));
 await Promise.all(uniquePhotoUrls.map(assertOutputPath));
@@ -62,4 +62,4 @@ const exportedPhotoCount = (
 assert.equal(exportedPhotoCount, 126);
 await access(path.join(outputRoot, ".nojekyll"));
 
-console.log("GitHub Pages export verified: root travel log, /plan, base path assets, and 126 photos.");
+console.log("GitHub Pages export verified: root travel log, /plan, base path assets, 121 selected photos, and 126 available photo files.");

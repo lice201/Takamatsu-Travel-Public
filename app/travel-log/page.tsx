@@ -5,7 +5,7 @@ import { PhotoSequence } from "./PhotoSequence";
 import { RestaurantSection } from "./RestaurantSection";
 import { ModeIcon } from "./ModeIcon";
 import { withBasePath } from "../site-paths";
-import { modeLabels, tripDays, tripStats, tripThemes, type ThemeSection, type TripLeg } from "./trip-data";
+import { modeLabels, tripDays, tripStats, tripThemes, type ThemeSection, type TripLeg, type TripStop } from "./trip-data";
 import styles from "./travel-log.module.css";
 import timelineStyles from "./timeline.module.css";
 
@@ -53,6 +53,34 @@ function Transfer({ leg }: { leg: TripLeg }) {
   );
 }
 
+function StopContent({ stop }: { stop: TripStop }) {
+  const meals = (stop.meals ?? [])
+    .map((meal, index) => ({ meal, index, insertAt: Math.min(Math.max(meal.insertAt ?? stop.photos.length, 0), stop.photos.length) }))
+    .sort((left, right) => left.insertAt - right.insertAt || left.index - right.index);
+  const sections: React.ReactNode[] = [];
+  let photoStart = 0;
+  let mealStart = 0;
+
+  while (mealStart < meals.length) {
+    const insertAt = meals[mealStart].insertAt;
+    if (insertAt > photoStart) {
+      sections.push(<PhotoSequence key={`photos-${photoStart}-${insertAt}`} photos={stop.photos.slice(photoStart, insertAt)} />);
+    }
+    while (mealStart < meals.length && meals[mealStart].insertAt === insertAt) {
+      const { meal, index } = meals[mealStart];
+      sections.push(<RestaurantSection key={`meal-${index}-${meal.restaurantName ?? meal.title ?? meal.label}`} meal={meal} />);
+      mealStart += 1;
+    }
+    photoStart = insertAt;
+  }
+
+  if (photoStart < stop.photos.length) {
+    sections.push(<PhotoSequence key={`photos-${photoStart}-end`} photos={stop.photos.slice(photoStart)} />);
+  }
+
+  return sections;
+}
+
 export default function TravelLogPage() {
   return (
     <main className={styles.travelLog}>
@@ -88,7 +116,7 @@ export default function TravelLogPage() {
 
       <aside className={styles.draftNote} aria-label="여행 기록 기준" data-reveal>
         <span>FIELD NOTES / ACTUAL ROUTE</span>
-        <p>2026년 8월 24–27일의 실제 이동 기록에서 의미 있는 방문지와 이동 구간만 추렸습니다. 짧은 환승과 확인되지 않은 상점·식당은 제외했습니다. 사진 126장을 연결했으며, <strong>—</strong>로 표시된 전체 거리는 추가 검증 전까지 비워 둡니다.</p>
+        <p>2026년 8월 24–27일의 실제 이동 기록에서 의미 있는 방문지와 이동 구간만 추렸습니다. 짧은 환승과 확인되지 않은 상점·식당은 제외했습니다. 사진 121장을 연결했으며, <strong>—</strong>로 표시된 전체 거리는 추가 검증 전까지 비워 둡니다.</p>
       </aside>
 
       <section className={styles.days} aria-label="날짜별 실제 여행 기록">
@@ -129,10 +157,7 @@ export default function TravelLogPage() {
                       <small>{stop.lat.toFixed(4)}° N · {stop.lng.toFixed(4)}° E</small>
                     </div>
                   </div>
-                  {stop.photos.length > 0 && (
-                    <PhotoSequence photos={stop.photos} />
-                  )}
-                  {stop.meal && <RestaurantSection meal={stop.meal} />}
+                  <StopContent stop={stop} />
                   {day.legs[stopIndex] && <Transfer leg={day.legs[stopIndex]} />}
                 </section>
               ))}

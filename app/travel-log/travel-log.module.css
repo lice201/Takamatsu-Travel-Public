@@ -106,7 +106,7 @@
 .photo figcaption { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem .1rem .1rem; color: #353b37; font: 500 1rem/1.55 Arial,"Noto Sans KR",sans-serif; word-break: keep-all; }
 .photo figcaption small { flex: none; color: var(--sea); font-size: .72rem; letter-spacing: .13em; }
 .wide img { aspect-ratio: 16 / 8.8; }
-.panorama img { aspect-ratio: 2.2 / 1; }
+.panorama img, .panoramic img { aspect-ratio: 2.2 / 1; }
 .portrait img { aspect-ratio: 4 / 5.4; }
 .portrait .textPhotoPlaceholder { aspect-ratio: 4 / 5.4; }
 .split img { aspect-ratio: 4 / 3; }
@@ -222,7 +222,7 @@
   }
   .photo img, .wide img, .split img { aspect-ratio: 4 / 3; }
   .portrait img { aspect-ratio: 4 / 5; }
-  .panorama img { aspect-ratio: 2.2 / 1; }
+  .panorama img, .panoramic img { aspect-ratio: 2.2 / 1; }
   .textPhotoPlaceholder, .portrait .textPhotoPlaceholder, .split .textPhotoPlaceholder { aspect-ratio: 4 / 3; }
   .photo figcaption { align-items: flex-start; }
   .themeIntro, .mealHeader, .mealNotes { grid-template-columns: 1fr; }

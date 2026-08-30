@@ -9,7 +9,8 @@ function visibleText(value?: string) {
 
 export function RestaurantSection({ meal }: { meal: MealStop }) {
   const restaurantName = visibleText(meal.restaurantName);
-  if (!restaurantName) return meal.photos.length > 0 ? <PhotoSequence photos={meal.photos} /> : null;
+  const displayTitle = restaurantName ?? visibleText(meal.title);
+  if (!displayTitle) return null;
 
   const branchName = visibleText(meal.branchName);
   const subtitle = visibleText(meal.subtitle);
@@ -21,11 +22,11 @@ export function RestaurantSection({ meal }: { meal: MealStop }) {
   const detailCount = Number(menu.length > 0) + Number(Boolean(review));
 
   return (
-    <section className={styles.mealSection} aria-label={`${meal.label} · ${restaurantName}`} data-reveal>
+    <section className={styles.mealSection} aria-label={`${meal.label} · ${displayTitle}`} data-reveal>
       <header className={styles.mealHeader}>
         <p>FOOD / {meal.label}</p>
         <div>
-          <h4>{restaurantName}</h4>
+          <h4>{displayTitle}</h4>
           {(branchName || subtitle) && <p className={styles.mealIdentity}>{branchName && <strong>{branchName}</strong>}{subtitle && <span>{subtitle}</span>}</p>}
           {(location || time) && (
             <dl className={styles.mealMeta}>
