@@ -42,12 +42,25 @@ test("server-renders the actual Timeline-based travel log", async () => {
   assert.match(html, /Takamatsu City → Yume Town → Airport/);
   assert.match(html, /Sushiro · Lunch/);
   assert.match(html, /Yume Town Shopping/);
-  assert.match(html, /Honetsukidori/);
-  assert.match(html, /aria-label="DINNER · Honetsukidori"/);
-  assert.match(html, /aria-label="LUNCH · Sushiro"/);
-  for (const meal of ["MEAL · Merikenya", "DINNER · 첫날 저녁", "LUNCH · 쇼도시마 점심", "DINNER · 다카마쓰 귀환 후 저녁", "LUNCH · 리쓰린공원 우동"]) {
-    assert.match(html, new RegExp(`aria-label="${meal}"`));
+  for (const meal of [
+    "MEAL · Merikenya",
+    "DINNER · 하쿠리타바이 한베 (Hakuri tabai hanbey)",
+    "LUNCH · RestleA",
+    "DINNER · Rojiura",
+    "LUNCH · 사누끼우동 우에하라야 (Sanuki Udon Ueharaya)",
+    "DINNER · 호네츠키도리 잇카쿠 마루가메본점",
+    "LUNCH · Sushiro",
+  ]) {
+    assert.ok(html.includes(`aria-label="${meal}"`));
   }
+  const sexyPhoto = html.indexOf("Sexy한 화로");
+  const dinnerBike = html.indexOf('aria-label="Rojiura에서 Takamatsu Station까지 BIKE 이동"');
+  const stationPhoto = html.indexOf("첫날 눈으로만 본 다카마쓰 심볼타워");
+  const roundOneBike = html.indexOf('aria-label="Takamatsu Station에서 Round One Stadium Takamatsu까지 BIKE 이동"');
+  const roundOnePhoto = html.indexOf("마리오카트 전설의 시작");
+  assert.ok(sexyPhoto < dinnerBike && dinnerBike < stationPhoto);
+  assert.ok(stationPhoto < roundOneBike && roundOneBike < roundOnePhoto);
+  assert.doesNotMatch(html, /OVERALL REVIEW/);
   assert.doesNotMatch(html, /TODO · ADD ORDERED MENU|TODO · ADD RESTAURANT REVIEW/);
   assert.match(html, /THEME \/ TAKAGI-SAN/);
   assert.match(html, /SHODOSHIMA TAKAGI COLLECTION/);
@@ -93,13 +106,15 @@ test("photo essays use repeatable blocks and restaurant data stays editable", as
   ]);
   assert.match(pageSource, /stop\.meals/);
   assert.match(pageSource, /RestaurantSection key=/);
+  assert.match(pageSource, /stop\.interstitialLegs/);
+  assert.match(pageSource, /insertion\.kind === "meal"/);
   assert.match(photoSource, /MAX_PHOTOS_PER_BLOCK = 3/);
   assert.match(photoSource, /buildPhotoBlocks/);
   assert.doesNotMatch(photoSource, /photos\.length === 3/);
   assert.match(photoSource, /loading="lazy"/);
   assert.doesNotMatch(photoSource, /eagerFirst/);
   assert.match(dataSource, /export type MealStop/);
-  for (const field of ["title", "branchName", "subtitle", "location", "time", "menu", "review", "note", "insertAt"]) assert.match(dataSource, new RegExp(`${field}\\?:`));
+  for (const field of ["title", "branchName", "subtitle", "location", "time", "menu", "review", "overallReview", "note", "insertAt"]) assert.match(dataSource, new RegExp(`${field}\\?:`));
   assert.match(dataSource, /export type ThemeSection/);
   assert.match(dataSource, /tripThemes/);
   assert.doesNotMatch(dataSource, /actualPhotos|photoIds|actualLayouts/);
@@ -114,8 +129,8 @@ test("photo essays use repeatable blocks and restaurant data stays editable", as
     assert.match(options, /group: \d+/);
     assert.match(options, /objectPosition: "/);
   }
-  assert.match(dataSource, /photo\("day3", 30, \{[\s\S]*?caption: "호네츠키도리"/);
-  assert.match(dataSource, /photo\("day4", 15, \{[\s\S]*?caption: "스시로 점심"/);
+  assert.match(dataSource, /photo\("day3", 30, \{/);
+  assert.match(dataSource, /photo\("day4", 15, \{/);
   assert.match(dataSource, /photo\("day2-takagi", 1, \{/);
   assert.match(dataSource, /photo\("yadon", 14, \{/);
   assert.match(dataSource, /photo\("day1", 1, \{[\s\S]*?layout: "portrait"[\s\S]*?objectFit: "contain"/);
@@ -132,15 +147,24 @@ test("photo essays use repeatable blocks and restaurant data stays editable", as
   assert.match(photoSource, /objectFit: photo\.objectFit/);
   assert.match(restaurantSource, /const displayTitle = restaurantName/);
   assert.match(restaurantSource, /if \(!displayTitle\) return null/);
+  assert.match(restaurantSource, /const overallReview = visibleText\(meal\.overallReview\)/);
+  assert.match(restaurantSource, /\{overallReview && \(/);
+  assert.ok(restaurantSource.indexOf("PhotoSequence photos={meal.photos}") < restaurantSource.indexOf("{overallReview && ("));
   assert.match(restaurantSource, /meal\.menu\?\.filter/);
   assert.match(restaurantSource, /detailCount > 0/);
   assert.match(restaurantSource, /location \|\| time/);
   assert.doesNotMatch(restaurantSource, /TODO · ADD/);
-  assert.match(dataSource, /restaurantName: "Honetsukidori"/);
+  assert.match(dataSource, /restaurantName: "호네츠키도리 잇카쿠 마루가메본점"/);
   assert.match(dataSource, /restaurantName: "Sushiro"/);
+  assert.equal([...dataSource.matchAll(/overallReview: "",/g)].length, 7);
+  assert.equal([...dataSource.matchAll(/interstitialLegs: \[/g)].length, 1);
+  assert.match(dataSource, /leg: { from: "Rojiura", to: "Takamatsu Station", mode: "bicycle" }/);
+  assert.match(dataSource, /leg: { from: "Takamatsu Station", to: "Round One Stadium Takamatsu", mode: "bicycle" }/);
   assert.match(dataSource, /meals\?: MealStop\[\]/);
   assert.equal([...dataSource.matchAll(/label: "(?:MEAL|LUNCH|DINNER)",/g)].length, 7);
   assert.match(css, /mealNotes\[data-columns="1"\]/);
+  assert.match(css, /\.overallReviewBox/);
+  assert.match(css, /\.overallReviewText/);
   assert.match(css, /photoBlock\[data-count="2"\]/);
   assert.match(css, /photoBlock\[data-count="3"\]/);
   assert.match(css, /\.sizeXs[^}]*--photo-width: 38%/);

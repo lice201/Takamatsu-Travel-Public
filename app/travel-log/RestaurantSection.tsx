@@ -17,6 +17,7 @@ export function RestaurantSection({ meal }: { meal: MealStop }) {
   const location = visibleText(meal.location);
   const time = visibleText(meal.time);
   const review = visibleText(meal.review);
+  const overallReview = visibleText(meal.overallReview);
   const note = visibleText(meal.note);
   const menu = meal.menu?.filter((item) => item.trim()) ?? [];
   const detailCount = Number(menu.length > 0) + Number(Boolean(review));
@@ -44,6 +45,12 @@ export function RestaurantSection({ meal }: { meal: MealStop }) {
       )}
       {note && <p className={styles.mealNote}>{note}</p>}
       {meal.photos.length > 0 && <PhotoSequence photos={meal.photos} />}
+      {overallReview && (
+        <section className={styles.overallReviewBox} aria-label="전체적인 후기">
+          <p className={styles.overallReviewLabel}>OVERALL REVIEW</p>
+          <p className={styles.overallReviewText}>{overallReview}</p>
+        </section>
+      )}
     </section>
   );
 }

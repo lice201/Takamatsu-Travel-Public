@@ -167,6 +167,9 @@
 .mealNotes blockquote { margin: .9rem 0 0; }
 .mealNote { width: min(940px,100%); margin: 0 auto clamp(3rem,6vw,5rem); color: #555c57; font: 500 .95rem/1.75 Arial,"Noto Sans KR",sans-serif; }
 .mealSection .photoSequence { width: 100%; }
+.overallReviewBox { width: min(1120px,100%); margin: clamp(3rem,6vw,5rem) auto 0; padding: clamp(1.5rem,3vw,2.5rem); border: 1px solid var(--line); background: rgba(255,255,255,.35); }
+.overallReviewLabel { margin: 0 0 1rem; color: var(--sea); font: 700 .68rem/1.4 Arial,sans-serif; letter-spacing: .2em; }
+.overallReviewText { margin: 0; color: #454c48; font: 500 1rem/1.8 Arial,"Noto Sans KR",sans-serif; white-space: pre-line; word-break: keep-all; }
 .transfer { width: min(940px, calc(100% - 2.5rem)); margin: clamp(4rem,8vw,7rem) auto 0; display: flex; align-items: center; gap: 1rem; color: var(--sea); font: 700 .62rem/1 Arial,sans-serif; letter-spacing: .17em; }
 .transfer::before, .transfer::after { content: ""; height: 1px; flex: 1; background: var(--line); }
 .transfer i { font-style: normal; font-size: 1rem; }
@@ -229,7 +232,8 @@
   .mealHeader { gap: .75rem; }
   .mealMeta { display: grid; grid-template-columns: 1fr; gap: .75rem; }
   .mealMeta div { min-width: 0; }
-  .mealNotes li, .mealNotes blockquote, .mealNote { font-size: .92rem; }
+  .mealNotes li, .mealNotes blockquote, .mealNote, .overallReviewText { font-size: .92rem; }
+  .overallReviewBox { padding: 1.25rem; }
   .epilogue h2 { font-size: clamp(4rem,20vw,7rem); }
 }
 

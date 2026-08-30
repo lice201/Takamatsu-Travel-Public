@@ -30,8 +30,11 @@ const [rootHtml, travelLogHtml, planHtml] = await Promise.all([
 assert.match(rootHtml, /Takamatsu Travel Log/);
 assert.match(rootHtml, /THEME \/ TAKAGI-SAN/);
 assert.match(rootHtml, /THEME \/ YADON/);
-assert.match(rootHtml, /aria-label="DINNER · Honetsukidori"/);
+assert.match(rootHtml, /aria-label="DINNER · 호네츠키도리 잇카쿠 마루가메본점"/);
 assert.match(rootHtml, /aria-label="LUNCH · Sushiro"/);
+assert.match(rootHtml, /aria-label="Rojiura에서 Takamatsu Station까지 BIKE 이동"/);
+assert.match(rootHtml, /aria-label="Takamatsu Station에서 Round One Stadium Takamatsu까지 BIKE 이동"/);
+assert.doesNotMatch(rootHtml, /OVERALL REVIEW/);
 assert.match(travelLogHtml, /Takamatsu Travel Log/);
 assert.match(planHtml, /TRIP NOTE/);
 

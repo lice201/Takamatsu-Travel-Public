@@ -54,22 +54,39 @@ function Transfer({ leg }: { leg: TripLeg }) {
 }
 
 function StopContent({ stop }: { stop: TripStop }) {
-  const meals = (stop.meals ?? [])
-    .map((meal, index) => ({ meal, index, insertAt: Math.min(Math.max(meal.insertAt ?? stop.photos.length, 0), stop.photos.length) }))
-    .sort((left, right) => left.insertAt - right.insertAt || left.index - right.index);
+  const insertions = [
+    ...(stop.meals ?? []).map((meal, index) => ({
+      kind: "meal" as const,
+      index,
+      insertAt: Math.min(Math.max(meal.insertAt ?? stop.photos.length, 0), stop.photos.length),
+      order: 10,
+      meal,
+    })),
+    ...(stop.interstitialLegs ?? []).map((insertion, index) => ({
+      kind: "leg" as const,
+      index,
+      insertAt: Math.min(Math.max(insertion.insertAt, 0), stop.photos.length),
+      order: insertion.order ?? 20,
+      leg: insertion.leg,
+    })),
+  ].sort((left, right) => left.insertAt - right.insertAt || left.order - right.order || left.index - right.index);
   const sections: React.ReactNode[] = [];
   let photoStart = 0;
-  let mealStart = 0;
+  let insertionStart = 0;
 
-  while (mealStart < meals.length) {
-    const insertAt = meals[mealStart].insertAt;
+  while (insertionStart < insertions.length) {
+    const insertAt = insertions[insertionStart].insertAt;
     if (insertAt > photoStart) {
       sections.push(<PhotoSequence key={`photos-${photoStart}-${insertAt}`} photos={stop.photos.slice(photoStart, insertAt)} />);
     }
-    while (mealStart < meals.length && meals[mealStart].insertAt === insertAt) {
-      const { meal, index } = meals[mealStart];
-      sections.push(<RestaurantSection key={`meal-${index}-${meal.restaurantName ?? meal.title ?? meal.label}`} meal={meal} />);
-      mealStart += 1;
+    while (insertionStart < insertions.length && insertions[insertionStart].insertAt === insertAt) {
+      const insertion = insertions[insertionStart];
+      if (insertion.kind === "meal") {
+        sections.push(<RestaurantSection key={`meal-${insertion.index}-${insertion.meal.restaurantName ?? insertion.meal.title ?? insertion.meal.label}`} meal={insertion.meal} />);
+      } else {
+        sections.push(<Transfer key={`leg-${insertion.index}-${insertion.leg.from}-${insertion.leg.to}`} leg={insertion.leg} />);
+      }
+      insertionStart += 1;
     }
     photoStart = insertAt;
   }
@@ -97,9 +114,9 @@ export default function TravelLogPage() {
         <div className={styles.heroMeta}><span>TRAVEL LOG</span><span>01 — 04</span></div>
         <div className={styles.heroCopy}>
           <p>TAKAMATSU</p>
-          <h1>3 NIGHTS<br />/ 4 DAYS</h1>
+          <h1> 3박 4일간 우리의 추억</h1>
           <div><time dateTime="2026-08-24">24</time><span>—</span><time dateTime="2026-08-27">27 AUG 2026</time></div>
-          <small>Japan · Kagawa · Shodoshima</small>
+          <small>Japan : Kagawa · Shodoshima</small>
         </div>
 
       </header>
@@ -107,8 +124,8 @@ export default function TravelLogPage() {
       <section className={styles.overview} id="trip-overview" aria-labelledby="overview-title">
         <div className={styles.sectionIntro} data-reveal>
           <p>TRIP OVERVIEW</p>
-          <h2 id="overview-title">바다를 오간<br />나흘의 경로</h2>
-          <span>실제 이동 기록을 바탕으로 다카마쓰공항, 쇼도시마, 리쓰린, 고토히라, 마루가메, 붓쇼잔과 마지막 날의 유메타운을 이어 정리했습니다.</span>
+          <h2 id="overview-title">바다를 오간<br />나흘동안의 경로</h2>
+          <span>Google Maps 타임라인을 바탕으로 다카마쓰공항, 쇼도시마, 리쓰린, 고토히라, 마루가메, 붓쇼잔과 마지막 날의 유메타운을 이어 정리했습니다.</span>
         </div>
         <div className={styles.overviewMapWrap} data-reveal><RouteMap /></div>
         <dl className={styles.stats}>{tripStats.map((stat) => <div key={stat.label}><dt>{stat.label}</dt><dd>{stat.value}</dd></div>)}</dl>
@@ -116,7 +133,7 @@ export default function TravelLogPage() {
 
       <aside className={styles.draftNote} aria-label="여행 기록 기준" data-reveal>
         <span>FIELD NOTES / ACTUAL ROUTE</span>
-        <p>2026년 8월 24–27일의 실제 이동 기록에서 의미 있는 방문지와 이동 구간만 추렸습니다. 짧은 환승과 확인되지 않은 상점·식당은 제외했습니다. 사진 121장을 연결했으며, <strong>—</strong>로 표시된 전체 거리는 추가 검증 전까지 비워 둡니다.</p>
+        <p>2026년 8월 24–27일의 실제 이동 기록에서 의미 있는 방문지와 이동 구간만 추렸습니다. 메인 식사의 경우 식당 위치와 이름을 포함하여 따로 섹션으로 분리하였으며, 짧은 환승과 확인되지 않은 상점·식당은 제외했습니다. </p>
       </aside>
 
       <section className={styles.days} aria-label="날짜별 실제 여행 기록">
