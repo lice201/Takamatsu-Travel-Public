@@ -7,11 +7,13 @@
 .segmentFlight { stroke-width: .9; stroke-dasharray: 5 3; opacity: .8; }
 .segmentShopping { stroke-width: 1.15; stroke-dasharray: .8 1.2; opacity: .92; }
 
-.mapLegend { display: flex; flex-wrap: wrap; gap: .55rem 2rem; margin-top: .85rem; }
-.mapLegend b, .modeBadge { display: inline-flex; align-items: center; width: fit-content; color: #31545a; font: 700 .72rem/1 Arial,"Noto Sans KR",sans-serif; letter-spacing: .11em; }
-.mapLegend b { flex: 0 0 auto; gap: .175rem; padding: .2rem 0; border: 0; background: transparent; white-space: nowrap; }
-.modeBadge { gap: .5rem; }
-.mapLegend svg { width: .9rem; height: .9rem; flex: none; }
+.mapLegend { display: flex; flex-wrap: wrap; row-gap: .55rem; column-gap: 1.5rem; margin-top: .85rem; }
+.legendItem, .modeBadge { width: fit-content; color: #31545a; font: 700 .72rem/1 Arial,"Noto Sans KR",sans-serif; letter-spacing: .11em; }
+.legendItem { display: inline-grid; grid-template-columns: 1rem auto; column-gap: .3rem; align-items: center; width: max-content; flex: none; padding: .2rem 0; border: 0; background: transparent; }
+.legendIcon { display: grid; width: 1rem; height: 1rem; place-items: center; }
+.legendIcon svg { display: block; width: 1rem; height: 1rem; }
+.legendLabel { white-space: nowrap; }
+.modeBadge { display: inline-flex; align-items: center; gap: .5rem; }
 .modeBadge svg { width: 1.15rem; height: 1.15rem; flex: none; }
 
 .contextLegs { display: grid; gap: .55rem; margin-top: 1.75rem; }

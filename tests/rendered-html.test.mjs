@@ -248,6 +248,12 @@ test("route map provides numbered places, mode icons, and non-color transport di
   assert.match(mapSource, /이날의 실제 이동 경로/);
   assert.match(mapSource, /지도 이동수단 범례/);
   assert.match(mapSource, /지도 장소 번호/);
+  for (const className of ["legendItem", "legendIcon", "legendLabel"]) {
+    assert.match(mapSource, new RegExp(`timelineStyles\\.${className}`));
+  }
+  assert.doesNotMatch(mapSource, /<ModeIcon mode=\{mode\} \/>\{modeLabels\[mode\]\}/);
+  assert.match(timelineCss, /legendItem[^}]*inline-grid[^}]*grid-template-columns: 1rem auto/s);
+  assert.match(timelineCss, /legendLabel[^}]*white-space: nowrap/s);
   assert.doesNotMatch(mapSource, /markerLabel/);
   for (const mode of ["bus", "train", "ferry", "walk", "bicycle", "shopping", "flight"]) {
     assert.match(iconSource, new RegExp(`mode === "${mode}"`));

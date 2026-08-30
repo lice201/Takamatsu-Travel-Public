@@ -61,7 +61,14 @@ export function RouteMap({ stops, legs, compact = false }: { stops?: MapStop[]; 
       <figcaption>
         <span>{compact ? "ACTUAL DAY ROUTE" : "ACTUAL ROUTE · 24–27 AUG 2026"}</span>
         <span className={timelineStyles.mapLegend} aria-label="지도 이동수단 범례">
-          {modes.map((mode) => <b key={mode} className={timelineStyles[`legend${modeLabels[mode]}`]}><ModeIcon mode={mode} />{modeLabels[mode]}</b>)}
+          {modes.map((mode) => (
+            <b key={mode} className={timelineStyles.legendItem}>
+              <span className={timelineStyles.legendIcon}>
+                <ModeIcon mode={mode} />
+              </span>
+              <span className={timelineStyles.legendLabel}>{modeLabels[mode]}</span>
+            </b>
+          ))}
         </span>
         {!compact && (
           <ol className={styles.mapPlaceLegend} aria-label="지도 장소 번호">
