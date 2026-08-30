@@ -113,7 +113,7 @@ export default function TravelLogPage() {
         <div className={styles.heroMeta}><span>TRAVEL LOG</span><span>01 — 04</span></div>
         <div className={styles.heroCopy}>
           <p>TAKAMATSU</p>
-          <h1> 3박 4일간 우리의 추억</h1>
+          <h1> 카가와에서의 추억</h1>
           <div><time dateTime="2026-08-24">24</time><span>—</span><time dateTime="2026-08-27">27 AUG 2026</time></div>
           <small>Japan : Kagawa · Shodoshima</small>
         </div>
@@ -188,7 +188,7 @@ export default function TravelLogPage() {
       <footer className={styles.epilogue} data-reveal>
         <img src={withBasePath("/travel-log/day4/day4-24.jpg")} alt="귀국편 비행기에서 바라본 세토내해" width="1800" height="2400" loading="lazy" decoding="async" />
         <div className={styles.epilogueShade} />
-        <div><p>SEE YOU AGAIN,</p><h2>TAKAMATSU.</h2><span>AUGUST 2026</span></div>
+        <div><p>SEE YOU AGAIN,</p><h2>TAKAMATSU</h2><span>AUGUST 2026</span></div>
 
       </footer>
     </main>
