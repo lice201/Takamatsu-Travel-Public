@@ -172,9 +172,9 @@ export const tripDays: TripDay[] = [
         meals: [
           {
             label: "MEAL",
-            restaurantName: "Merikenya",
-            branchName: "다카마쓰역점",
-            location: "Takamatsu",
+            restaurantName: "메리켄야",
+            branchName: "다카마쓰역 앞점",
+            location: "6-20 Nishinomarucho, Takamatsu, Kagawa 760-0021 일본",
             menu: [],
             review: "",
             overallReview: "나빼고 다 온우동, 나는 냉우동을 먹었는데 다카마쓰에서의 우동은,, 면발이 매우 쫄깃했다. 그리고 가격도 싸다. 퇴근하신 직장인 분들이 혼밥하러 자주 오시는 거 같은데 자기가 사는 도시에 이런 우동 맛집이 있다면 정말 기쁠 거 같다.",
@@ -226,7 +226,7 @@ export const tripDays: TripDay[] = [
               }),
               photo("day1", 7, {
                 alt: "다카마쓰 시내 첫날 저녁 6",
-                caption: "신경준이 시킨 칵테일. 무난한 풍선껌 맛이 났다. 안에 들어있는 사탕은 정말 맛있었는데 아직도 어떤 제품인지 모르겠다.",
+                caption: "내가 시킨 칵테일. 무난한 풍선껌 맛이 났다. 안에 들어있는 사탕은 정말 맛있었는데 아직도 어떤 제품인지 모르겠다.",
                 layout: "collage",
                 size: "small",
                 group: 2,

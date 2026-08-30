@@ -30,6 +30,7 @@ const [rootHtml, travelLogHtml, planHtml] = await Promise.all([
 assert.match(rootHtml, /Takamatsu Travel Log/);
 assert.match(rootHtml, /THEME \/ TAKAGI-SAN/);
 assert.match(rootHtml, /THEME \/ YADON/);
+assert.match(rootHtml, /aria-label="MEAL · 메리켄야"/);
 assert.match(rootHtml, /aria-label="DINNER · 호네츠키도리 잇카쿠 마루가메본점"/);
 assert.match(rootHtml, /aria-label="LUNCH · Sushiro"/);
 assert.match(rootHtml, /aria-label="Rojiura에서 Takamatsu Station까지 BIKE 이동"/);
@@ -38,6 +39,12 @@ assert.match(rootHtml, /aria-label="Round One Stadium Takamatsu에서 숙소까�
 assert.match(rootHtml, /aria-label="하쿠리타바이 한베 \(Hakuri tabai hanbey\)에서 숙소까지 WALK 이동"/);
 assert.ok((rootHtml.match(/OVERALL REVIEW/g) ?? []).length >= 7);
 assert.doesNotMatch(rootHtml, /TIME —/);
+for (const anchor of ["day-1", "day-2", "day-3", "day-4", "theme-yadon"]) {
+  assert.match(rootHtml, new RegExp(`href="#${anchor}"`));
+}
+assert.match(rootHtml, /id="theme-yadon"/);
+assert.match(rootHtml, /날짜별 빠른 이동/);
+assert.ok((rootHtml.match(/aria-label="사진 크게 보기:/g) ?? []).length >= 121);
 assert.match(travelLogHtml, /Takamatsu Travel Log/);
 assert.match(planHtml, /TRIP NOTE/);
 

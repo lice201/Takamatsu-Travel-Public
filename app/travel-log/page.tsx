@@ -4,6 +4,7 @@ import { RouteMap } from "./RouteMap";
 import { PhotoSequence } from "./PhotoSequence";
 import { RestaurantSection } from "./RestaurantSection";
 import { ModeIcon } from "./ModeIcon";
+import { DayNavigation } from "./DayNavigation";
 import { withBasePath } from "../site-paths";
 import { modeLabels, tripDays, tripStats, tripThemes, type ThemeSection, type TripLeg, type TripStop } from "./trip-data";
 import styles from "./travel-log.module.css";
@@ -21,9 +22,9 @@ export const metadata: Metadata = {
   },
 };
 
-function ThemeGallery({ theme }: { theme: ThemeSection }) {
+function ThemeGallery({ theme, id }: { theme: ThemeSection; id?: string }) {
   return (
-    <section className={styles.themeSection} aria-label={theme.label} data-reveal>
+    <section className={styles.themeSection} id={id} aria-label={theme.label} data-reveal>
       <header className={styles.themeIntro}>
         <p>{theme.label}</p>
         <div><h3>{theme.title}</h3><span>{theme.note}</span></div>
@@ -104,10 +105,7 @@ export default function TravelLogPage() {
     <main className={styles.travelLog}>
       <RevealObserver />
       <a className={styles.skipLink} href="#trip-overview">여행 개요로 건너뛰기</a>
-      <nav className={styles.logNav} aria-label="여행 기록 내비게이션">
-        <a href={withBasePath("/plan/")} aria-label="기존 여행계획 페이지로 이동">← PLAN</a>
-        <div>{tripDays.map((day) => <a key={day.day} href={`#day-${day.day}`}>D{day.day}</a>)}</div>
-      </nav>
+      <DayNavigation />
 
       <header className={styles.hero}>
         <img src={withBasePath("/travel-log/day2/day2-03.jpg")} alt="쇼도시마행 페리에서 바라본 세토내해" width="2400" height="1800" fetchPriority="high" decoding="async" />
@@ -125,7 +123,7 @@ export default function TravelLogPage() {
       <section className={styles.overview} id="trip-overview" aria-labelledby="overview-title">
         <div className={styles.sectionIntro} data-reveal>
           <p>TRIP OVERVIEW</p>
-          <h2 id="overview-title">바다를 오간<br />나흘동안의 경로</h2>
+          <h2 id="overview-title">바다를 오간<br />4일동안의 경로</h2>
           <span>Google Maps 타임라인을 바탕으로 다카마쓰공항, 쇼도시마, 리쓰린, 고토히라, 마루가메, 붓쇼잔과 마지막 날의 유메타운을 이어 정리했습니다.</span>
         </div>
         <div className={styles.overviewMapWrap} data-reveal><RouteMap /></div>
@@ -185,7 +183,7 @@ export default function TravelLogPage() {
         ))}
       </section>
 
-      {tripThemes.map((theme) => <ThemeGallery key={theme.label} theme={theme} />)}
+      {tripThemes.map((theme) => <ThemeGallery key={theme.label} theme={theme} id={theme.label === "THEME / YADON" ? "theme-yadon" : undefined} />)}
 
       <footer className={styles.epilogue} data-reveal>
         <img src={withBasePath("/travel-log/day4/day4-24.jpg")} alt="귀국편 비행기에서 바라본 세토내해" width="1800" height="2400" loading="lazy" decoding="async" />

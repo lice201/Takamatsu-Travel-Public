@@ -1,0 +1,63 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: clamp(3.5rem,7vw,5.5rem) clamp(4rem,8vw,7rem) clamp(2rem,4vw,3rem);
+  overflow: hidden;
+  color: #f6f3eb;
+  background: rgba(13,16,16,.97);
+  animation: lightboxFade .16s ease-out;
+}
+
+.content { display: grid; max-width: min(92vw,1800px); max-height: 100%; justify-items: center; gap: 1rem; }
+.content img { display: block; max-width: 100%; max-height: min(82vh,1200px); width: auto; height: auto; object-fit: contain; }
+.details { display: grid; width: min(56rem,100%); justify-items: center; gap: .65rem; text-align: center; }
+.counter { color: #aebdb8; font: 700 .7rem/1 Arial,sans-serif; letter-spacing: .2em; }
+.details p { margin: 0; color: #f6f3eb; font: 500 clamp(.92rem,1.3vw,1.05rem)/1.6 Arial,"Noto Sans KR",sans-serif; word-break: keep-all; }
+
+.closeButton,
+.arrowButton {
+  position: absolute;
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(255,255,255,.28);
+  color: #fff;
+  background: rgba(0,0,0,.18);
+  cursor: pointer;
+}
+.closeButton:hover,
+.arrowButton:hover { border-color: rgba(255,255,255,.72); }
+.closeButton:focus-visible,
+.arrowButton:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.closeButton { top: 1.1rem; right: 1.1rem; font-size: 1.8rem; }
+.arrowButton { top: 50%; transform: translateY(-50%); font-size: 1.45rem; }
+.previousButton { left: 1.25rem; }
+.nextButton { right: 1.25rem; }
+
+@keyframes lightboxFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 760px) {
+  .backdrop { padding: 4.5rem .85rem 5.25rem; }
+  .content { max-width: 100%; gap: .85rem; }
+  .content img { max-width: 100%; max-height: 72vh; }
+  .details { gap: .55rem; padding-inline: .5rem; }
+  .details p { font-size: .9rem; line-height: 1.55; }
+  .closeButton,
+  .arrowButton { width: 3.25rem; height: 3.25rem; background: rgba(0,0,0,.5); }
+  .closeButton { top: .65rem; right: .65rem; }
+  .arrowButton { top: auto; bottom: .7rem; transform: none; }
+  .previousButton { left: .85rem; }
+  .nextButton { right: .85rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop { animation: none; }
+}

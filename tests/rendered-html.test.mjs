@@ -43,7 +43,7 @@ test("server-renders the actual Timeline-based travel log", async () => {
   assert.match(html, /Sushiro · Lunch/);
   assert.match(html, /Yume Town Shopping/);
   for (const meal of [
-    "MEAL · Merikenya",
+    "MEAL · 메리켄야",
     "DINNER · 하쿠리타바이 한베 (Hakuri tabai hanbey)",
     "LUNCH · RestleA",
     "DINNER · Rojiura",
@@ -82,6 +82,12 @@ test("server-renders the actual Timeline-based travel log", async () => {
   assert.match(html, /ACTUAL ROUTE/);
   assert.doesNotMatch(html, /Kurashiki|Bikan Historical Quarter|Ohara Museum|Ivy Square/);
   assert.doesNotMatch(html, /예정 동선|계획표 기반|방문 여부는 아직/);
+  for (const anchor of ["day-1", "day-2", "day-3", "day-4", "theme-yadon"]) {
+    assert.match(html, new RegExp(`href="#${anchor}"`));
+  }
+  assert.match(html, /id="theme-yadon"/);
+  assert.match(html, /날짜별 빠른 이동/);
+  assert.match(html, /사진 크게 보기:/);
 });
 
 test("travel data separates stops, timed legs, and transport modes", async () => {
@@ -107,13 +113,20 @@ test("all 121 selected travel photos render from ASCII-safe files", async () => 
 });
 
 test("photo essays use repeatable blocks and restaurant data stays editable", async () => {
-  const [pageSource, photoSource, restaurantSource, dataSource, css] = await Promise.all([
+  const [pageSource, photoSource, lightboxSource, dayNavigationSource, restaurantSource, dataSource, css, lightboxCss, dayNavigationCss] = await Promise.all([
     readFile(new URL("../app/travel-log/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/travel-log/PhotoSequence.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/travel-log/PhotoLightbox.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/travel-log/DayNavigation.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/travel-log/RestaurantSection.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/travel-log/trip-data.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/travel-log/travel-log.module.css", import.meta.url), "utf8"),
+    readFile(new URL("../app/travel-log/photo-lightbox.module.css", import.meta.url), "utf8"),
+    readFile(new URL("../app/travel-log/day-navigation.module.css", import.meta.url), "utf8"),
   ]);
+  assert.doesNotMatch(pageSource, /^"use client"/);
+  assert.match(pageSource, /<DayNavigation \/>/);
+  assert.match(pageSource, /"theme-yadon"/);
   assert.match(pageSource, /stop\.meals/);
   assert.match(pageSource, /RestaurantSection key=/);
   assert.match(pageSource, /stop\.interstitialLegs/);
@@ -129,6 +142,9 @@ test("photo essays use repeatable blocks and restaurant data stays editable", as
   assert.match(dataSource, /export type MealStop/);
   for (const field of ["title", "branchName", "subtitle", "location", "time", "menu", "review", "overallReview", "note", "insertAt"]) assert.match(dataSource, new RegExp(`${field}\\?:`));
   assert.match(dataSource, /export type ThemeSection/);
+  assert.match(photoSource, /<PhotoLightbox/);
+  assert.match(photoSource, /returnFocusRef/);
+  assert.match(photoSource, /lightboxPhotos/);
   assert.match(dataSource, /tripThemes/);
   assert.doesNotMatch(dataSource, /actualPhotos|photoIds|actualLayouts/);
   const photoEntries = [...dataSource.matchAll(/photo\("(day1|day2|day2-takagi|day3|day4|yadon)", (\d+), \{([\s\S]*?)\n\s*\}\),/g)];
@@ -195,6 +211,31 @@ test("photo essays use repeatable blocks and restaurant data stays editable", as
   assert.match(css, /photoBlock\[data-count="2"\] > \.photo[^}]*var\(--photo-weight\)/s);
   assert.match(css, /photoBlock\[data-count="3"\][\s\S]*var\(--photo-width\)/);
   assert.match(css, /--photo-mobile-width: 86%/);
+  assert.match(css, /\.photoButton[^}]*cursor: zoom-in/);
+  assert.match(css, /\.day[^}]*scroll-margin-top: 4\.5rem/);
+  assert.match(css, /\.themeSection[^}]*scroll-margin-top: 4\.5rem/);
+  assert.match(lightboxSource, /role="dialog"/);
+  assert.match(lightboxSource, /aria-modal="true"/);
+  for (const label of ["사진 닫기", "이전 사진", "다음 사진"]) assert.match(lightboxSource, new RegExp(`aria-label="${label}"`));
+  for (const key of ["Escape", "ArrowLeft", "ArrowRight"]) assert.match(lightboxSource, new RegExp(`event\\.key === "${key}"`));
+  assert.match(lightboxSource, /event\.key !== "Tab"/);
+  assert.match(lightboxSource, /document\.body\.style\.overflow = "hidden"/);
+  assert.match(lightboxSource, /returnFocus\?\.focus\(\)/);
+  assert.match(lightboxSource, /createPortal/);
+  assert.doesNotMatch(lightboxSource, /preload|new Image/);
+  assert.match(lightboxCss, /object-fit: contain/);
+  assert.match(lightboxCss, /max-height: min\(82vh,1200px\)/);
+  assert.match(lightboxCss, /@media \(max-width: 760px\)/);
+  assert.match(lightboxCss, /@media \(prefers-reduced-motion: reduce\)/);
+  for (const id of ["day-1", "day-2", "day-3", "day-4", "theme-yadon"]) assert.match(dayNavigationSource, new RegExp(`id: "${id}"`));
+  assert.match(dayNavigationSource, /new IntersectionObserver/);
+  assert.match(dayNavigationSource, /rootMargin: "-18% 0px -72% 0px"/);
+  assert.match(dayNavigationSource, /scrollIntoView/);
+  assert.match(dayNavigationSource, /prefers-reduced-motion: reduce/);
+  assert.match(dayNavigationSource, /aria-current=/);
+  assert.match(dayNavigationCss, /position: fixed/);
+  assert.match(dayNavigationCss, /data-active="true"/);
+  assert.match(dayNavigationCss, /@media \(max-width: 760px\)/);
 });
 
 test("route map provides numbered places, mode icons, and non-color transport distinctions", async () => {

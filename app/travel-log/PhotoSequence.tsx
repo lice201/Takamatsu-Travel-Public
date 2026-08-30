@@ -1,4 +1,8 @@
+"use client";
+
+import { useCallback, useMemo, useRef, useState } from "react";
 import type { TripPhoto } from "./trip-data";
+import { PhotoLightbox, type LightboxPhoto } from "./PhotoLightbox";
 import styles from "./travel-log.module.css";
 
 const sizeClassMap: Record<TripPhoto["size"], string> = {
@@ -9,7 +13,7 @@ const sizeClassMap: Record<TripPhoto["size"], string> = {
   full: styles.sizeFull,
 };
 
-function Photo({ photo }: { photo: TripPhoto }) {
+function Photo({ photo, onOpen }: { photo: TripPhoto; onOpen?: (trigger: HTMLButtonElement) => void }) {
   return (
     <figure
       className={[styles.photo, styles[photo.layout], sizeClassMap[photo.size]].join(" ")}
@@ -17,15 +21,22 @@ function Photo({ photo }: { photo: TripPhoto }) {
       data-placeholder-note={photo.placeholder ? photo.replacementNote : undefined}
     >
       {photo.src ? (
-        <img
-          src={photo.src}
-          alt={photo.alt}
-          width="1400"
-          height="980"
-          loading="lazy"
-          decoding="async"
-          style={{ objectPosition: photo.objectPosition, objectFit: photo.objectFit }}
-        />
+        <button
+          className={styles.photoButton}
+          type="button"
+          aria-label={`사진 크게 보기: ${photo.alt}`}
+          onClick={(event) => onOpen?.(event.currentTarget)}
+        >
+          <img
+            src={photo.src}
+            alt={photo.alt}
+            width="1400"
+            height="980"
+            loading="lazy"
+            decoding="async"
+            style={{ objectPosition: photo.objectPosition, objectFit: photo.objectFit }}
+          />
+        </button>
       ) : (
         <div className={styles.textPhotoPlaceholder} role="img" aria-label={photo.alt}>
           <span>{photo.placeholderLabel ?? "PHOTO"}</span>
@@ -61,15 +72,41 @@ export function buildPhotoBlocks(photos: TripPhoto[]) {
 }
 
 export function PhotoSequence({ photos }: { photos: TripPhoto[] }) {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const returnFocusRef = useRef<HTMLButtonElement | null>(null);
+  const lightboxPhotos = useMemo(
+    () => photos.filter((photo): photo is TripPhoto & LightboxPhoto => Boolean(photo.src)),
+    [photos],
+  );
+  const closeLightbox = useCallback(() => setActiveIndex(null), []);
+
+  function openPhoto(photo: TripPhoto, trigger: HTMLButtonElement) {
+    const index = lightboxPhotos.indexOf(photo as TripPhoto & LightboxPhoto);
+    if (index < 0) return;
+    returnFocusRef.current = trigger;
+    setActiveIndex(index);
+  }
+
   return (
-    <div className={styles.photoSequence} data-reveal>
-      {buildPhotoBlocks(photos).map((block, blockIndex) => (
-        <div className={styles.photoBlock} data-count={block.length} key={`photo-block-${blockIndex}`}>
-          {block.map((photo, photoIndex) => (
-            <Photo key={`${photo.src ?? photo.placeholderLabel}-${photoIndex}`} photo={photo} />
-          ))}
-        </div>
-      ))}
-    </div>
+    <>
+      <div className={styles.photoSequence} data-reveal>
+        {buildPhotoBlocks(photos).map((block, blockIndex) => (
+          <div className={styles.photoBlock} data-count={block.length} key={`photo-block-${blockIndex}`}>
+            {block.map((photo, photoIndex) => (
+              <Photo key={`${photo.src ?? photo.placeholderLabel}-${photoIndex}`} photo={photo} onOpen={(trigger) => openPhoto(photo, trigger)} />
+            ))}
+          </div>
+        ))}
+      </div>
+      {activeIndex !== null && (
+        <PhotoLightbox
+          photos={lightboxPhotos}
+          activeIndex={activeIndex}
+          onIndexChange={setActiveIndex}
+          onClose={closeLightbox}
+          returnFocusRef={returnFocusRef}
+        />
+      )}
+    </>
   );
 }
