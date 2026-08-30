@@ -23,7 +23,7 @@ export function RestaurantSection({ meal }: { meal: MealStop }) {
   const detailCount = Number(menu.length > 0) + Number(Boolean(review));
 
   return (
-    <section className={styles.mealSection} aria-label={`${meal.label} · ${displayTitle}`} data-reveal>
+    <section className={`${styles.mealSection} ${overallReview ? styles.mealSectionWithOverallReview : ""}`} aria-label={`${meal.label} · ${displayTitle}`} data-reveal>
       <header className={styles.mealHeader}>
         <p>FOOD / {meal.label}</p>
         <div>

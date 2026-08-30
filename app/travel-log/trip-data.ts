@@ -177,7 +177,7 @@ export const tripDays: TripDay[] = [
             location: "Takamatsu",
             menu: [],
             review: "",
-            overallReview: "",
+            overallReview: "나빼고 다 온우동, 나는 냉우동을 먹었는데 다카마쓰에서의 우동은,, 면발이 매우 쫄깃했다. 그리고 가격도 싸다. 퇴근하신 직장인 분들이 혼밥하러 자주 오시는 거 같은데 자기가 사는 도시에 이런 우동 맛집이 있다면 정말 기쁠 거 같다.",
             insertAt: 0,
             photos: [
               photo("day1", 2, {
@@ -205,7 +205,7 @@ export const tripDays: TripDay[] = [
             location: "Takamatsu7-10 Furubabacho, Takamatsu, Kagawa 760-0045 일본",
             menu: [],
             review: "",
-            overallReview: "",
+            overallReview: "하나에 50엔의 야키토리 꼬치라서 무작정 시켰더니 요금이 생각보다 많이 나왔다. 소금구이는 무난했지만, 소스가 발라져 있는 꼬치는 어쩔 땐 너무 짜고 어쩔 땐 괜찮고 나름 복불복을 타는 듯 했다. 일본 이자카야의 한 형태를 알 수 있게 해주는 가게였다.",
             insertAt: 1,
             photos: [
               photo("day1", 5, {
@@ -265,6 +265,13 @@ export const tripDays: TripDay[] = [
                 objectPosition: "center",
               }),
             ],
+          },
+        ],
+        interstitialLegs: [
+          {
+            insertAt: 1,
+            order: 20,
+            leg: { from: "하쿠리타바이 한베 (Hakuri tabai hanbey)", to: "숙소", mode: "walk" },
           },
         ],
       },
@@ -456,7 +463,7 @@ export const tripDays: TripDay[] = [
           }),
           photo("day2", 20, {
             alt: "쇼도시마 올리브공원과 주변 풍경 14",
-            caption: "올리브 정원이라고 따로 구역이 있었던 거 같은데 유독 우리가 못 찾은 거 같기도 하고.. 아무튼 구글맵 탓이다. 얘도 외진 곳은 힘들었나 보다.",
+            caption: "올리브 정원 입구",
             layout: "portrait",
             size: "medium",
             group: 5,
@@ -471,12 +478,12 @@ export const tripDays: TripDay[] = [
             location: "일본 〒761-4434 Kagawa, Shozu District, Shodoshima, Nishimura, 甲2171−甲２１７１",
             menu: [],
             review: "",
-            overallReview: "",
+            overallReview: "올리브 정원이라고 따로 구역이 있었던 거 같은데 유독 우리가 못 찾은 거 같기도 하고.. 구글맵이 길찾기를 이상하게 해서 식당을 찾는데 꽤나 고생했다. 중간에 투덜거리는 사람도 분명 있었을 것이다. (내 얘기 맞음) 하지만 이 올리브 소면은 그 하소연을 잠재울 만큼 시원하고 맛있었다. 튀김과 적당한 밥의 양도 훌륭했다. 이 식당으로 가자고 제안한 민성이형에게 정말 고마웠다. ",
             insertAt: 12,
             photos: [
               photo("day2", 19, {
                 alt: "쇼도시마 올리브공원과 주변 풍경 13",
-                caption: "구글맵이 길찾기를 이상하게 해서 식당을 찾는데 꽤나 고생했다. 중간에 투덜거리는 사람도 분명 있었을 것이다. (내 얘기 맞음) 하지만 이 올리브 소면은 그 하소연을 잠재울 만큼 시원하고 맛있었다. 튀김과 적당한 밥의 양도 훌륭했다. 이 식당으로 가자고 제안한 민성이형에게 정말 고마웠다.",
+                caption: "올리브 소면 정식",
                 layout: "split",
                 size: "full",
                 group: 5,
@@ -611,7 +618,7 @@ export const tripDays: TripDay[] = [
             location: "1-chome-2-20 Tokiwacho, Takamatsu, Kagawa 760-0054 일본",
             menu: [],
             review: "",
-            overallReview: "",
+            overallReview: "사장님이 한국어를 잘 하셔서 여기서 인기 있는 메뉴를 한국어로 설명해주셨다. 실제로 우리가 시켜먹었던 우설, 안창살, 갈비는 모두 맛있었다. 마지막에 간도 시켜먹었는데 간은 그냥 순대 간 맛이랑 비슷했지만, 특유의 비린 향이 나지 않아서 괜찮았다. 혼밥하러 오는 사람도 있는 만큼, 혼자 여행하러 온 사람도 즐기고 가기 괜찮은 가게라고 생각한다.",
             insertAt: 0,
             photos: [
               photo("day2", 28, {
@@ -658,6 +665,10 @@ export const tripDays: TripDay[] = [
           {
             insertAt: 2,
             leg: { from: "Takamatsu Station", to: "Round One Stadium Takamatsu", mode: "bicycle" },
+          },
+          {
+            insertAt: 4,
+            leg: { from: "Round One Stadium Takamatsu", to: "숙소", mode: "bicycle" },
           },
         ],
       },
@@ -817,12 +828,12 @@ export const tripDays: TripDay[] = [
             location: "1-chome-18-8 Ritsurincho, Takamatsu, Kagawa 760-0073 일본",
             menu: [],
             review: "",
-            overallReview: "",
+            overallReview: "멸치 육수가 돋보였던 우동집. 특이하게 면을 받으면 우리가 직접 뜨거운 물에 면을 데쳐서 국물을 부어 먹는 방식이었다. 가격도 싸고 정말 맛있었다.",
             insertAt: 7,
             photos: [
               photo("day3", 9, {
                 alt: "리쓰린공원의 정원과 풍경 8",
-                caption: "멸치 육수가 돋보였던 우동집. 특이하게 면을 받으면 우리가 직접 뜨거운 물에 면을 데쳐서 국물을 부어 먹는 방식이었다. 가격도 싸고 정말 맛있었다.",
+                caption: "나는 기본적인 자루 우동에 유부 추가, 고로케 추가해서 먹었다.",
                 layout: "wide",
                 size: "large",
                 group: 5,
@@ -1026,7 +1037,7 @@ export const tripDays: TripDay[] = [
             location: "317 Hamamachi, Marugame, Kagawa 763-0022 일본",
             menu: [],
             review: "",
-            overallReview: "",
+            overallReview: "17시에 오픈인데 벌써 앞에서 기다리는 사람들이 많았다. 매장은 엄청 넓었지만 그럼에도 웨이팅이 있다는 건 이 식당의 인기를 체감하게 해준다. 호네츠키도리는 전반적으로 짜고 자극적인 맛이어서, 술안주로는 제격인 거 같다. 그래서 사람들이 맥주를 한가득 퍼담아서 먹는 거 같다. ",
             photos: [
               photo("day3", 30, {
                 alt: "마루가메 호네츠키도리 식사 1",
@@ -1255,7 +1266,7 @@ export const tripDays: TripDay[] = [
             location: "608-1 Sanjocho, Takamatsu, Kagawa 761-8072 일본",
             menu: [],
             review: "",
-            overallReview: "",
+            overallReview: "민성이형이 생 오징어 타격을 맞고 제대로 즐기지 못했던 다소 찝찝한 식사. 가격은 나름 싼 거 같긴 한데.. 역시 퀄리티를 기대할 순 없었다 ㅠㅠ",
             photos: [
               photo("day4", 15, {
                 alt: "유메타운 다카마쓰 스시로 점심 1",

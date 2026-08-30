@@ -34,7 +34,10 @@ assert.match(rootHtml, /aria-label="DINNER · 호네츠키도리 잇카쿠 마�
 assert.match(rootHtml, /aria-label="LUNCH · Sushiro"/);
 assert.match(rootHtml, /aria-label="Rojiura에서 Takamatsu Station까지 BIKE 이동"/);
 assert.match(rootHtml, /aria-label="Takamatsu Station에서 Round One Stadium Takamatsu까지 BIKE 이동"/);
-assert.doesNotMatch(rootHtml, /OVERALL REVIEW/);
+assert.match(rootHtml, /aria-label="Round One Stadium Takamatsu에서 숙소까지 BIKE 이동"/);
+assert.match(rootHtml, /aria-label="하쿠리타바이 한베 \(Hakuri tabai hanbey\)에서 숙소까지 WALK 이동"/);
+assert.ok((rootHtml.match(/OVERALL REVIEW/g) ?? []).length >= 7);
+assert.doesNotMatch(rootHtml, /TIME —/);
 assert.match(travelLogHtml, /Takamatsu Travel Log/);
 assert.match(planHtml, /TRIP NOTE/);
 

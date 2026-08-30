@@ -34,8 +34,9 @@ function ThemeGallery({ theme }: { theme: ThemeSection }) {
 }
 
 function LegTime({ leg, className }: { leg: TripLeg; className?: string }) {
-  if (!leg.startTime && !leg.endTime) return <span className={className}>TIME —</span>;
-  return <span className={className}>{leg.startTime ?? "—"} — {leg.endTime ?? "—"}</span>;
+  const times = [leg.startTime, leg.endTime].filter((time): time is string => Boolean(time));
+  if (times.length === 0) return null;
+  return <span className={className}>{times.join(" → ")}</span>;
 }
 
 function Transfer({ leg }: { leg: TripLeg }) {
